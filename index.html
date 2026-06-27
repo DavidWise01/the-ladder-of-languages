@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ladder of Languages · A Purple Paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#140f1f;          /* deep aubergine night */
+    --ink2:#1b1430;         /* panel */
+    --ink3:#241a3d;         /* raised */
+    --parch:#ece6f4;        /* reading text */
+    --parch-dim:#a99fc4;    /* muted prose */
+    --violet:#9a7cff;       /* the human accent (his signature) */
+    --violet-deep:#6f5fd0;
+    --amber:#e6a23c;        /* THE WALL — the pressure */
+    --cyan:#5fd0e0;         /* the machine / code */
+    --rule:#37305230;
+    --green:#5fd6a0;
+    --rose:#e07a9a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--parch);
+    font-family:'Spectral',Georgia,serif;
+    font-weight:300;
+    font-size:18px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* faint vertical "ladder rail" running down the whole page */
+  body::before{
+    content:"";position:fixed;top:0;bottom:0;left:50%;width:1px;
+    background:linear-gradient(var(--violet) 0%,transparent 4%,transparent 96%,var(--violet) 100%);
+    opacity:.06;pointer-events:none;z-index:0;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:96vh;display:flex;flex-direction:column;justify-content:center;padding:80px 0 60px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--cyan);margin-bottom:28px;font-weight:500;
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:900;
+    font-size:clamp(46px,9vw,104px);line-height:.94;letter-spacing:-.02em;
+    color:var(--parch);margin-bottom:8px;
+  }
+  .hero h1 .stack{color:var(--violet);display:block;font-style:italic;font-weight:400}
+  .hero .deck{
+    font-size:clamp(19px,2.4vw,25px);color:var(--parch-dim);max-width:620px;
+    margin-top:34px;line-height:1.55;
+  }
+  .hero .deck b{color:var(--parch);font-weight:500}
+  .hero .amber{color:var(--amber);font-style:italic}
+  .scrolltip{
+    margin-top:60px;font-family:'JetBrains Mono',monospace;font-size:12px;
+    letter-spacing:.2em;color:var(--parch-dim);text-transform:uppercase;
+    display:flex;align-items:center;gap:12px;
+  }
+  .scrolltip .ln{width:46px;height:1px;background:var(--violet);opacity:.5}
+
+  .byline{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--parch-dim);
+    letter-spacing:.05em;margin-top:54px;line-height:1.9;
+  }
+  .byline b{color:var(--violet);font-weight:500}
+
+  /* ---------- THESIS STRIP ---------- */
+  .thesis{padding:70px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .thesis p{font-size:clamp(22px,3vw,30px);font-family:'Fraunces',serif;font-weight:400;line-height:1.4;color:var(--parch)}
+  .thesis p .k{color:var(--amber);font-style:italic}
+  .thesis .sub{font-family:'Spectral';font-size:18px;color:var(--parch-dim);margin-top:24px;font-weight:300;max-width:680px}
+
+  /* ---------- ALTITUDE LEGEND ---------- */
+  .legend{display:flex;gap:0;margin:54px 0 10px;flex-wrap:wrap;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+  .legend .cell{flex:1;min-width:150px;padding:18px 20px;border-right:1px solid var(--rule)}
+  .legend .cell:last-child{border-right:none}
+  .legend .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+  .legend .k.v{color:var(--violet)}.legend .k.a{color:var(--amber)}.legend .k.c{color:var(--cyan)}
+  .legend .d{font-size:14.5px;color:var(--parch-dim);line-height:1.5}
+
+  /* ---------- ERA HEADERS ---------- */
+  .era{margin:96px 0 0;padding-top:34px;border-top:2px solid var(--violet-deep)}
+  .era .num{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.3em;color:var(--violet);text-transform:uppercase}
+  .era h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,40px);margin-top:8px;line-height:1.05;letter-spacing:-.01em}
+  .era .era-deck{color:var(--parch-dim);margin-top:14px;max-width:680px;font-size:17px}
+
+  /* ---------- LANGUAGE RUNG ---------- */
+  .rung{margin:60px 0;position:relative}
+  .rung-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .rung-head .name{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(30px,5vw,48px);letter-spacing:-.02em;color:var(--parch);line-height:1}
+  .rung-head .year{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--cyan);font-weight:500}
+  .rung-head .who{font-family:'Spectral';font-style:italic;font-size:16px;color:var(--parch-dim)}
+  .alt-tag{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--violet);border:1px solid var(--violet-deep);
+    padding:3px 9px;border-radius:20px;margin-top:6px;
+  }
+
+  /* THE WALL — the signature device */
+  .wall{
+    position:relative;margin:26px 0;padding:20px 22px 20px 26px;
+    background:linear-gradient(90deg,rgba(230,162,60,.10),rgba(230,162,60,.02));
+    border-radius:8px;overflow:hidden;
+  }
+  .wall::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 6px,transparent 6px,transparent 12px);
+  }
+  .wall .lab{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--amber);font-weight:700;margin-bottom:8px;display:block;
+  }
+  .wall p{font-size:17px;color:var(--parch);line-height:1.6}
+  .wall p b{color:var(--amber);font-weight:500}
+
+  .rung > p{margin:18px 0;color:var(--parch)}
+  .rung > p.dim{color:var(--parch-dim);font-size:16.5px}
+  .lesson{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:20px;
+    color:var(--violet);line-height:1.5;margin:22px 0;padding-left:18px;border-left:2px solid var(--violet-deep);
+  }
+  .flag{
+    font-family:'Spectral';font-size:15px;color:var(--parch-dim);font-style:italic;
+    margin-top:14px;padding:12px 16px;background:#ffffff06;border-radius:6px;border:1px solid var(--rule);
+  }
+  .flag b{color:var(--rose);font-style:normal;font-weight:500;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:5px}
+
+  /* CODE BLOCKS */
+  .code{
+    background:#0d0a16;border:1px solid #2a2342;border-radius:10px;
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.75;
+    margin:20px 0;overflow-x:auto;color:#cfc8e6;font-weight:400;
+  }
+  .code .bar{
+    display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #2a2342;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--parch-dim);
+  }
+  .code .bar .dot{width:9px;height:9px;border-radius:50%;background:#2a2342}
+  .code .bar .dot.live{background:var(--cyan)}
+  .code pre{padding:16px 18px;white-space:pre;overflow-x:auto}
+  .code .cm{color:#6b6388;font-style:italic}        /* comment */
+  .code .kw{color:var(--violet);font-weight:500}     /* keyword */
+  .code .st{color:var(--green)}                       /* string */
+  .code .fn{color:var(--cyan)}                         /* function/ident */
+  .code .nm{color:var(--amber)}                        /* number */
+  .code .out{color:#5fd6a0}                            /* output */
+
+  /* ---------- THE SPINE (hello world ladder) ---------- */
+  .spine{margin:50px 0}
+  .spine-row{
+    display:grid;grid-template-columns:130px 1fr;gap:0;align-items:stretch;
+    border-bottom:1px solid var(--rule);
+  }
+  .spine-row:first-child{border-top:1px solid var(--rule)}
+  .spine-row .who2{
+    padding:16px 18px 16px 0;border-right:1px solid var(--rule);
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .spine-row .who2 .y{color:var(--parch-dim);font-size:11px;margin-top:3px}
+  .spine-row .snip{
+    padding:16px 0 16px 20px;font-family:'JetBrains Mono',monospace;font-size:13px;
+    color:#cfc8e6;display:flex;align-items:center;white-space:pre-wrap;line-height:1.5;
+  }
+  .spine-row .snip .st{color:var(--green)}.spine-row .snip .kw{color:var(--violet)}
+  .spine-row .snip .cm{color:#6b6388}.spine-row .snip .fn{color:var(--cyan)}
+
+  /* ---------- PRESSURES (synthesis) ---------- */
+  .pressures{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:40px 0}
+  .pressures .p{background:var(--ink2);padding:24px 24px}
+  .pressures .p .pk{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+  .pressures .p .pd{font-size:15.5px;color:var(--parch-dim);line-height:1.55}
+  .pressures .p .pd b{color:var(--parch);font-weight:500}
+
+  /* ---------- CLOSE ---------- */
+  .close{padding:90px 0 70px;border-top:2px solid var(--violet-deep);margin-top:90px}
+  .close h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.01em}
+  .close p{color:var(--parch-dim);margin-top:22px;font-size:18px;max-width:700px}
+  .close p b{color:var(--parch);font-weight:500}
+  .close .big{font-family:'Fraunces',serif;font-style:italic;color:var(--violet);font-size:clamp(22px,3.4vw,30px);margin-top:34px;line-height:1.4;max-width:740px}
+
+  .foot{padding:40px 0 80px;border-top:1px solid var(--rule);margin-top:40px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--parch-dim);line-height:2}
+  .foot b{color:var(--violet);font-weight:500}
+
+  /* reveal */
+  .rev{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .rev.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rev{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  @media (max-width:640px){
+    body{font-size:17px}
+    .pressures{grid-template-columns:1fr}
+    .spine-row{grid-template-columns:104px 1fr}
+    .legend .cell{min-width:50%;flex:1 1 50%}
+    .code{font-size:12px}
+  }
+  a{color:var(--cyan);text-decoration:none;border-bottom:1px solid #5fd0e040}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ════════ HERO ════════ -->
+  <header class="hero">
+    <div class="eyebrow">A Purple Paper · the descent &amp; the climb</div>
+    <h1>The Ladder<span class="stack">of Languages</span></h1>
+    <p class="deck">A programming language is <b>an invented thing</b> — someone designed its grammar the way someone designs an alphabet. And every single one was built because the one before it <span class="amber">hit a wall.</span> This is that climb, rung by rung, from the first algorithm down to the metal and back up — with the real code, and the exact wall that forced each change.</p>
+    <div class="scrolltip"><span class="ln"></span>scroll to descend the ladder</div>
+    <div class="byline">
+      THE LADDER OF LANGUAGES · a history in walls<br>
+      every rung is a real language · every break is a real pressure<br>
+      written for someone starting from zero · <b>honest where the record is contested</b>
+    </div>
+  </header>
+
+  <!-- ════════ THESIS ════════ -->
+  <section class="thesis rev">
+    <p>No language is handed down by nature. Each one is a human invention — and inventions only appear when <span class="k">something breaks.</span></p>
+    <p class="sub">So the cleanest way to understand the whole history isn't a list of names and dates. It's a chain of failures: this language could not do <em>that</em>, so someone built the next one to fix it — and then <em>that</em> one broke too. Read it as a ladder. The bottom is the bare machine. Every rung up is a step away from the transistors and toward human meaning. Nothing on the ladder replaces what's beneath it; it sits on top of it.</p>
+
+    <div class="legend">
+      <div class="cell"><div class="k c">low rungs</div><div class="d">Close to the metal. Fast, total control, brutal to write. You think like the machine.</div></div>
+      <div class="cell"><div class="k a">the walls</div><div class="d">Marked in amber. The thing that broke and forced the next language into existence.</div></div>
+      <div class="cell"><div class="k v">high rungs</div><div class="d">Close to human thought. Readable, safe, slower. You think like a person; a translator does the rest.</div></div>
+    </div>
+  </section>
+
+  <!-- ════════ ERA I — BEFORE CODE ════════ -->
+  <section class="era rev">
+    <div class="num">Era I</div>
+    <h2>Before there was code</h2>
+    <p class="era-deck">The idea of a machine following written instructions is older than electronics. Two inventions set the stage — one made of wood and thread, one that existed only on paper.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">The Loom</span>
+      <span class="year">1804</span>
+      <span class="who">Joseph-Marie Jacquard · France</span>
+    </div>
+    <span class="alt-tag">altitude: the seed of the idea</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>Weaving a patterned fabric meant a human pulling the right threads, by hand, for every single row — slow, and <b>the pattern lived only in the weaver's head.</b> There was no way to <em>store</em> a design and run it again.</p>
+    </div>
+    <p>Jacquard punched the pattern into stiff cards: a hole meant "lift this thread," no hole meant "leave it." The loom read the cards and wove the design automatically. The pattern was now <em>outside</em> a human head — written down, reusable, executable by a machine.</p>
+    <p class="dim">No one called it a program. But the shape is exactly right: instructions, encoded as holes (the original binary — hole / no-hole), fed to a machine that obeys them in order. Every line of code you will ever write is a descendant of a punched card.</p>
+    <div class="lesson">The first idea wasn't a language. It was that instructions can live on the outside, and a machine can read them.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">The First Program</span>
+      <span class="year">1843</span>
+      <span class="who">Ada Lovelace · England</span>
+    </div>
+    <span class="alt-tag">altitude: an algorithm, for a machine that didn't exist</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>Charles Babbage designed a mechanical computer — the Analytical Engine — that <em>could</em> calculate. But a machine that can follow instructions is useless until <b>someone writes the instructions.</b> No one had ever written a non-trivial set of steps meant to be executed by a machine.</p>
+    </div>
+    <p>Translating an article about Babbage's engine, Ada Lovelace added her own notes — longer than the original article. In <em>Note G</em> she wrote out, step by step, how the engine could compute the Bernoulli numbers: a loop, with variables changing on each pass. It is the first published algorithm designed to be run by a machine. She also saw further than Babbage — that such a machine could manipulate not just numbers but <em>any</em> symbol: music, language, anything you could encode.</p>
+    <div class="code">
+      <div class="bar"><span class="dot"></span>Note G · the shape of it (modernized)</div>
+<pre><span class="cm"># the first algorithm: compute a Bernoulli number</span>
+<span class="kw">set</span> result <span class="kw">=</span> <span class="nm">0</span>
+<span class="kw">for</span> each term <span class="kw">in</span> the series:
+    compute the term
+    result <span class="kw">=</span> result <span class="kw">+</span> term      <span class="cm"># the variable changes each pass — a loop</span>
+<span class="kw">return</span> result</pre>
+    </div>
+    <div class="flag"><b>honest flag</b>The "first programmer" title is debated. Babbage wrote small fragments of machine instructions earlier; Lovelace's Note G is the most complete and elaborate, and the first <em>published</em> one. The vision — that the machine could work on any symbol, not just sums — is hers and was genuinely ahead of its time.</div>
+    <div class="lesson">Hardware that can compute is half a computer. The instructions are the other half — and the instructions are a language.</div>
+  </div>
+
+  <!-- ════════ ERA II — THE METAL ════════ -->
+  <section class="era rev">
+    <div class="num">Era II</div>
+    <h2>The metal, and the first escape from it</h2>
+    <p class="era-deck">When real electronic computers arrived in the 1940s, programming meant speaking the machine's own language — which turned out to be nearly impossible for humans. The first "languages" were just thin layers of mercy on top of raw numbers.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Machine Code</span>
+      <span class="year">1940s</span>
+      <span class="who">the bare metal</span>
+    </div>
+    <span class="alt-tag">altitude: rung zero — you ARE the machine</span>
+    <p>At the bottom of the ladder there is no language at all — just numbers. The processor understands only patterns of bits (1s and 0s), where each pattern means one tiny operation: <em>load this number, add these two, store the result here.</em> Early programmers wrote these by hand and set them with physical switches or punched cards.</p>
+    <div class="code">
+      <div class="bar"><span class="dot"></span>machine code · "add two numbers" (illustrative)</div>
+<pre><span class="nm">10110000 01100001</span>   <span class="cm"># put the number 97 into a register</span>
+<span class="nm">00000100 00000101</span>   <span class="cm"># add 5 to it</span>
+<span class="nm">11110100</span>            <span class="cm"># halt</span></pre>
+    </div>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>It works, and it is the only thing the chip truly understands — but <b>no human can write or read this at scale.</b> One wrong bit is a silent catastrophe. A program of any size is unmaintainable. The machine's native tongue is unspeakable by people.</p>
+    </div>
+    <div class="lesson">The metal is honest but merciless. Every rung above exists to get humans further away from these bits.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Assembly</span>
+      <span class="year">1947</span>
+      <span class="who">Kathleen Booth · England</span>
+    </div>
+    <span class="alt-tag">altitude: rung one — names instead of numbers</span>
+    <div class="wall">
+      <span class="lab">▰ the wall (carried up from machine code)</span>
+      <p>Humans can't hold binary in their heads. So: <b>give each machine operation a short name</b> a person can remember and read.</p>
+    </div>
+    <p>Assembly language replaces each numeric instruction with a mnemonic — <span style="color:var(--cyan)">MOV</span>, <span style="color:var(--cyan)">ADD</span>, <span style="color:var(--cyan)">JMP</span>. A small program called an <em>assembler</em> translates those names back into the exact machine code. It is a one-to-one map: still the machine's way of thinking, but now <em>writeable</em>.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>assembly · the same "add" — now readable</div>
+<pre>      <span class="fn">MOV</span>  AL, <span class="nm">97</span>      <span class="cm">; put 97 in register AL</span>
+      <span class="fn">ADD</span>  AL, <span class="nm">5</span>       <span class="cm">; add 5</span>
+      <span class="fn">HLT</span>              <span class="cm">; halt</span></pre>
+    </div>
+    <div class="wall">
+      <span class="lab">▰ the new wall</span>
+      <p>Two fresh problems. First, you still think in single machine steps — writing <code>a × b + c</code> takes a dozen lines. Second, and worse: assembly is <b>different for every kind of chip.</b> Code written for one machine is gibberish to another. You rewrite everything to move it.</p>
+    </div>
+    <div class="lesson">A name is easier than a number. But you're still speaking the machine's language, one chip at a time.</div>
+    <div class="flag"><b>honest flag</b>Several people built early assemblers around the same time; Kathleen Booth wrote some of the first assembly languages and is the most commonly credited. "First" in this era is usually a cluster, not a single name.</div>
+  </div>
+
+  <!-- ════════ ERA III — THE HIGH-LEVEL LEAP ════════ -->
+  <section class="era rev">
+    <div class="num">Era III</div>
+    <h2>The leap: speak like a human, not a machine</h2>
+    <p class="era-deck">The 1950s broke the deadlock. Instead of one instruction at a time in the chip's own dialect, you'd write something close to mathematics or English — and a far more ambitious translator, a <em>compiler</em>, would turn a whole program into machine code for you. This is the great climb.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">FORTRAN</span>
+      <span class="year">1957</span>
+      <span class="who">John Backus &amp; team · IBM</span>
+    </div>
+    <span class="alt-tag">altitude: the first high climb — write the formula, not the steps</span>
+    <div class="wall">
+      <span class="lab">▰ the wall (carried up from assembly)</span>
+      <p>Scientists wanted to write <em>equations</em>, and assembly forced them to hand-translate every formula into dozens of machine steps, per chip. Most believed a machine could never translate human-style math into code as efficiently as a human could. <b>The wall was a belief: that high-level code was impossible or hopelessly slow.</b></p>
+    </div>
+    <p>FORTRAN — <em>Formula Translation</em> — let you write the math almost as you'd write it on paper, and its compiler produced machine code fast enough to win the skeptics over. It is widely called the first successful high-level language. Suddenly a formula was one line, and the <em>same</em> line could (with a different compiler) run on a different machine.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>FORTRAN · a formula is finally just a formula</div>
+<pre>      <span class="kw">PROGRAM</span> ADDER
+      INTEGER X
+      X <span class="kw">=</span> <span class="nm">97</span> <span class="kw">+</span> <span class="nm">5</span>
+      <span class="fn">PRINT</span> <span class="kw">*</span>, <span class="st">'HELLO, WORLD'</span>
+      <span class="kw">END</span></pre>
+    </div>
+    <div class="wall">
+      <span class="lab">▰ the new wall</span>
+      <p>FORTRAN was built for numbers. But people wanted computers to do things that <em>aren't</em> arithmetic — reason about symbols, process lists, handle language, run business records in plain English. <b>One language shaped for math couldn't be shaped for everything.</b></p>
+    </div>
+    <div class="lesson">Once a machine could translate human notation into fast code, the only question left was: <em>whose</em> notation? Every answer became a new language.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">LISP</span>
+      <span class="year">1958</span>
+      <span class="who">John McCarthy · MIT</span>
+    </div>
+    <span class="alt-tag">altitude: a language for thought, not sums</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>The new field of artificial intelligence needed to manipulate <b>symbols and lists</b> — words, logical statements, trees of ideas — and to define functions that call themselves (recursion). FORTRAN's number-grid couldn't bend that way.</p>
+    </div>
+    <p>LISP (<em>LISt Processor</em>) made the list the fundamental thing, and code itself was written as lists — so a LISP program could read and write other LISP programs. It introduced ideas decades early: recursion, functions as values, automatic memory management. Much of it looks strange (so many parentheses) because it's close to raw mathematical logic.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>LISP · factorial, defined in terms of itself (recursion)</div>
+<pre>(<span class="kw">defun</span> <span class="fn">factorial</span> (n)
+  (<span class="kw">if</span> (<span class="kw">=</span> n <span class="nm">0</span>)
+      <span class="nm">1</span>
+      (<span class="kw">*</span> n (<span class="fn">factorial</span> (<span class="kw">-</span> n <span class="nm">1</span>)))))   <span class="cm">; it calls itself</span></pre>
+    </div>
+    <div class="lesson">Some walls aren't about speed. FORTRAN couldn't <em>think in lists</em> — so a language was built whose every thought is a list.</div>
+    <div class="flag"><b>still alive</b>LISP's ideas (recursion, functions as data, garbage collection) were so far ahead that modern languages spent fifty years catching up to them. Its descendants still run today.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">COBOL</span>
+      <span class="year">1959</span>
+      <span class="who">committee · incl. Grace Hopper's ideas</span>
+    </div>
+    <span class="alt-tag">altitude: code a manager could read</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>Business — payroll, banking, inventory — was a huge new use for computers, but the people who understood the business weren't mathematicians. <b>Math-notation code was unreadable to them.</b> Programs needed to look like English so non-specialists could check what they did.</p>
+    </div>
+    <p>COBOL (<em>Common Business-Oriented Language</em>) was deliberately verbose and English-like. Grace Hopper had already proven the key idea — that a compiler could accept near-English and produce machine code — and championed making code readable to the business, not just the engineer.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>COBOL · reads almost like a sentence</div>
+<pre>       <span class="fn">MULTIPLY</span> HOURS-WORKED <span class="kw">BY</span> PAY-RATE
+           <span class="fn">GIVING</span> GROSS-PAY.
+       <span class="fn">DISPLAY</span> <span class="st">"HELLO, WORLD"</span>.</pre>
+    </div>
+    <div class="lesson">A language's audience is part of its design. COBOL's "wall" was human, not technical: the people who needed to <em>read</em> the code couldn't read math.</div>
+    <div class="flag"><b>still alive</b>Trillions of dollars in banking and government systems still run on COBOL today. "Old" does not mean "gone" — a rung that solved a real wall tends to stay standing.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">ALGOL</span>
+      <span class="year">1958–60</span>
+      <span class="who">an international committee</span>
+    </div>
+    <span class="alt-tag">altitude: the language that taught the others how to be written</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>Every language had its own ad-hoc grammar, and there was <b>no clean, formal, machine-independent way to write down an algorithm</b> and share it between researchers and machines. The field needed a rigorous common notation.</p>
+    </div>
+    <p>ALGOL (<em>Algorithmic Language</em>) is the most influential language most people have never heard of. It introduced block structure (code grouped in <code>begin … end</code>), nested scope, and was defined by a precise formal grammar (BNF) — the idea that a language's rules can themselves be written down exactly. Almost every language since — C, Java, Python, JavaScript — inherited its shape.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>ALGOL · structured blocks, the template for everything after</div>
+<pre><span class="kw">begin</span>
+    <span class="kw">integer</span> x;
+    x := <span class="nm">97</span> <span class="kw">+</span> <span class="nm">5</span>;
+    <span class="fn">print</span>(x)
+<span class="kw">end</span></pre>
+    </div>
+    <div class="lesson">Sometimes the wall is chaos itself. ALGOL's gift wasn't a feature — it was <em>grammar</em>: proof that a language could be specified as precisely as the math it expressed.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">BASIC</span>
+      <span class="year">1964</span>
+      <span class="who">Kemeny &amp; Kurtz · Dartmouth</span>
+    </div>
+    <span class="alt-tag">altitude: a language for everyone else</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>Computers were spreading, but every existing language assumed you were a scientist or a professional programmer. <b>Ordinary students and beginners had no way in.</b></p>
+    </div>
+    <p>BASIC (<em>Beginner's All-purpose Symbolic Instruction Code</em>) was designed so a student could sit down and make the machine do something in an afternoon. It later shipped on millions of home computers in the 1980s — for a whole generation, BASIC was the first taste of code.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>BASIC · about as simple as it got</div>
+<pre><span class="nm">10</span> <span class="kw">PRINT</span> <span class="st">"HELLO, WORLD"</span>
+<span class="nm">20</span> <span class="kw">GOTO</span> <span class="nm">10</span>   <span class="cm">REM loops forever</span></pre>
+    </div>
+    <div class="lesson">Accessibility is a design goal like any other. BASIC's wall was the priesthood — code that only experts could enter.</div>
+  </div>
+
+  <!-- ════════ ERA IV — SYSTEMS & STRUCTURE ════════ -->
+  <section class="era rev">
+    <div class="num">Era IV</div>
+    <h2>Power and structure: C and the object</h2>
+    <p class="era-deck">By the 1970s two new walls appeared. High-level languages were too far from the metal to build operating systems — but assembly was too painful and unportable. And programs had grown so large that even good code became an unmanageable tangle. Two answers reshaped everything.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">C</span>
+      <span class="year">1972</span>
+      <span class="who">Dennis Ritchie · Bell Labs</span>
+    </div>
+    <span class="alt-tag">altitude: the perfect middle — high enough to write, low enough to control</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>To build an operating system you need fine control over the machine's memory — which meant assembly, which meant <b>rewriting the entire system for every new computer.</b> High-level languages hid the machine too much to do the job; assembly chained you to one chip. There was no portable language for systems.</p>
+    </div>
+    <p>C sat exactly in the gap: structured and readable like a high-level language, but with direct access to memory like assembly. Its masterstroke — the Unix operating system was rewritten <em>in C</em>, so moving Unix to a new machine meant writing a C compiler, not rewriting Unix. C became the language the modern world is built on: operating systems, databases, other languages' own compilers.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>C · the hello world that shaped the canon</div>
+<pre><span class="cm">#include &lt;stdio.h&gt;</span>
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>) {
+    <span class="fn">printf</span>(<span class="st">"Hello, world\n"</span>);
+    <span class="kw">return</span> <span class="nm">0</span>;
+}</pre>
+    </div>
+    <div class="wall">
+      <span class="lab">▰ the new wall</span>
+      <p>C's power is also its danger: it trusts you completely with memory, so a single mistake corrupts data or crashes — or becomes a security hole. And as programs grew to millions of lines, C's flat style of functions-and-data became <b>a tangle no one could hold in their head.</b></p>
+    </div>
+    <div class="lesson">C found the load-bearing middle of the ladder and never left it. Fifty years on, the layer beneath almost everything is still C.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Smalltalk</span>
+      <span class="year">1972</span>
+      <span class="who">Alan Kay · Xerox PARC</span>
+    </div>
+    <span class="alt-tag">altitude: a new way to organize, not just to write</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>As programs ballooned, the old style — a pile of functions all reaching into shared data — became spaghetti: change one thing, break five others. <b>Largeness itself was the wall.</b> Code needed a way to stay organized as it grew.</p>
+    </div>
+    <p>Smalltalk made everything an <em>object</em>: a self-contained bundle of data <em>and</em> the behavior that acts on it, talking to other objects by sending messages. This is object-oriented programming in its purest form — model the program as a society of small responsible parts. The idea would soon flow into nearly every mainstream language.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>Smalltalk · objects sending messages</div>
+<pre>Transcript <span class="fn">show</span>: <span class="st">'Hello, world'</span>.   <span class="cm">"send 'show:' to the Transcript object"</span></pre>
+    </div>
+    <div class="lesson">Some walls aren't about what a language can compute, but how a human can <em>organize</em> what they wrote. The object was an answer to scale.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">C++</span>
+      <span class="year">1985</span>
+      <span class="who">Bjarne Stroustrup · Bell Labs</span>
+    </div>
+    <span class="alt-tag">altitude: C's speed + the object's structure</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>C was fast and close to the metal but had no objects, so big C programs tangled. Smalltalk had objects but was slower and a world apart. <b>You had to choose between speed and structure</b> — and large systems needed both.</p>
+    </div>
+    <p>C++ added objects (and much more) <em>on top of</em> C, keeping C's speed and machine access. You could write low-level, fast code and organize it into objects in the same language. It became the workhorse for things that must be both big and fast: game engines, browsers, trading systems.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>C++ · objects, but still close to the metal</div>
+<pre><span class="cm">#include &lt;iostream&gt;</span>
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    std::cout &lt;&lt; <span class="st">"Hello, world"</span> &lt;&lt; std::endl;
+    <span class="kw">return</span> <span class="nm">0</span>;
+}</pre>
+    </div>
+    <div class="wall">
+      <span class="lab">▰ the new wall</span>
+      <p>Power piled on power: C++ grew enormous and intricate, and it kept C's memory dangers. Writing correct C++ took deep expertise. <b>Most programmers didn't need maximum speed — they needed to stop crashing and ship faster.</b></p>
+    </div>
+    <div class="lesson">You can bolt the new idea onto the old rung — but you inherit the old rung's dangers too. C++ carried C's sharp edges up with it.</div>
+  </div>
+
+  <!-- ════════ ERA V — THE HUMAN ERA ════════ -->
+  <section class="era rev">
+    <div class="num">Era V</div>
+    <h2>The human era: readable, safe, everywhere</h2>
+    <p class="era-deck">By the 1990s, computers were fast and cheap enough to spend some of that speed on the <em>programmer</em> instead of the machine. The new walls weren't about capability — they were about human cost: too hard to write, too easy to crash, too tied to one computer. The answers prioritized the person.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Python</span>
+      <span class="year">1991</span>
+      <span class="who">Guido van Rossum · Netherlands</span>
+    </div>
+    <span class="alt-tag">altitude: near the top — code that reads like a sketch of thought</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>C and C++ made you write a lot of ceremony — type declarations, memory management, braces and semicolons — before you could do anything simple. For everyday tasks that was <b>too much friction; the language got in the way of the idea.</b></p>
+    </div>
+    <p>Python optimized ruthlessly for <em>readability</em> and speed-of-writing. It hides memory management, needs little ceremony, and uses indentation to show structure so the code looks clean. Compare it to C's hello world — the whole program is one line, and a beginner can read it aloud.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>Python · the entire program</div>
+<pre><span class="fn">print</span>(<span class="st">"Hello, world"</span>)</pre>
+    </div>
+    <div class="lesson">When the machine has speed to spare, spend it on the human. Python's wall was friction itself — and it won a generation by removing it.</div>
+    <div class="flag"><b>the trade</b>Python is slower than C because a translator works harder at run time to spare you. That's the deal at the top of the ladder: you trade some machine speed for a lot of human speed. Most of the time, that's the right trade.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Java</span>
+      <span class="year">1995</span>
+      <span class="who">James Gosling · Sun Microsystems</span>
+    </div>
+    <span class="alt-tag">altitude: high — and it invented a fake machine to stand on</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>C++ programs had to be recompiled — often rewritten — for every kind of computer, and its memory bugs caused endless crashes. The dream was <b>"write once, run anywhere"</b> with the memory dangers removed.</p>
+    </div>
+    <p>Java's trick was an invented, fake machine — the Java Virtual Machine (JVM). Your code compiles not to any real chip's code, but to <em>bytecode</em> for the JVM. Then a JVM built for each real platform runs that bytecode. Compile once, run on any machine that has a JVM. Java also took memory management out of your hands (automatic "garbage collection"), removing a whole class of crashes — and kept the object structure from the C++/Smalltalk line.</p>
+    <div class="code">
+      <div class="bar"><span class="dot"></span>Java · the ceremony is the portability &amp; structure</div>
+<pre><span class="kw">public class</span> <span class="fn">Hello</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        System.out.<span class="fn">println</span>(<span class="st">"Hello, world"</span>);
+    }
+}</pre>
+    </div>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>and the descent underneath it — every layer an invented language</div>
+<pre>Hello.java   <span class="cm">→ your text (a designed grammar)</span>
+   <span class="kw">↓</span> javac
+bytecode     <span class="cm">→ the JVM's language (an invented machine)</span>
+   <span class="kw">↓</span> JVM + JIT
+machine code <span class="cm">→ the real chip's language (also a design)</span>
+   <span class="kw">↓</span>
+transistors  <span class="cm">→ the only layer that isn't a language</span></pre>
+    </div>
+    <div class="lesson">Java's answer to portability was to invent a machine that doesn't exist, so the code never has to commit to a real one until the last moment. The whole ladder is languages compiling to languages — all the way down to the voltage.</div>
+  </div>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">JavaScript</span>
+      <span class="year">1995</span>
+      <span class="who">Brendan Eich · Netscape · in 10 days</span>
+    </div>
+    <span class="alt-tag">altitude: high — and it lives inside every web page</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>The early web was paper: pages you could read but not <em>do</em> anything with. There was <b>no way to make a page react</b> — respond to a click, check a form, change without reloading.</p>
+    </div>
+    <p>JavaScript was built (famously, in about ten days) to run <em>inside the browser</em> and make pages interactive. Despite a rushed birth and many quirks, it became one of the most-used languages on Earth simply because it owns the one place everyone goes: the web page. This very document runs a little of it to reveal each section as you scroll.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>JavaScript · making the page do something</div>
+<pre><span class="kw">function</span> <span class="fn">greet</span>() {
+    <span class="fn">alert</span>(<span class="st">"Hello, world"</span>);   <span class="cm">// pops up when you click</span>
+}</pre>
+    </div>
+    <div class="lesson">A language can win not by being best, but by owning the only door to somewhere everyone needs to be. JavaScript's wall was the static page — and it became the language of the web by default.</div>
+  </div>
+
+  <!-- ════════ ERA VI — THE RETURN ════════ -->
+  <section class="era rev">
+    <div class="num">Era VI</div>
+    <h2>The return: can we have it all?</h2>
+    <p class="era-deck">The newest walls are old ones, refused. For decades the deal was fixed: low rungs gave speed but danger; high rungs gave safety but cost speed. The modern question is whether that trade was ever truly necessary — or just unsolved.</p>
+  </section>
+
+  <div class="rung rev">
+    <div class="rung-head">
+      <span class="name">Rust</span>
+      <span class="year">2010 · 1.0 in 2015</span>
+      <span class="who">Graydon Hoare · Mozilla</span>
+    </div>
+    <span class="alt-tag">altitude: low-rung speed, high-rung safety — at the same time</span>
+    <div class="wall">
+      <span class="lab">▰ the wall</span>
+      <p>C and C++ give you raw speed and control, but their memory bugs cause the <b>majority of serious software crashes and security vulnerabilities</b> — decades of them. The two usual fixes both cost something: write in C/C++ and accept the danger, or use a "garbage-collected" language (like Java/Python) and accept the slowdown. The wall: <em>nobody had safety and bare-metal speed together.</em></p>
+    </div>
+    <p>Rust's idea is a compiler that <em>proves</em> your memory use is safe before the program ever runs — a strict set of ownership rules checked at compile time, with no run-time garbage collector slowing things down. If it compiles, a whole category of crashes is impossible. It's harder to satisfy the compiler, but the payoff is C-level speed without C's most dangerous bugs.</p>
+    <div class="code">
+      <div class="bar"><span class="dot live"></span>Rust · the compiler checks your safety before it runs</div>
+<pre><span class="kw">fn</span> <span class="fn">main</span>() {
+    <span class="fn">println!</span>(<span class="st">"Hello, world"</span>);
+}</pre>
+    </div>
+    <div class="lesson">The newest move on the ladder isn't a higher rung — it's refusing the old trade. Rust treats "fast <em>or</em> safe" not as a law of nature but as a wall waiting to be broken.</div>
+    <div class="flag"><b>honest flag</b>Rust doesn't make all bugs impossible — only a specific (large, costly) class of memory errors. And its strictness has a real learning cost. It's a genuine advance, not a silver bullet; the trade-offs moved, they didn't vanish.</div>
+  </div>
+
+  <!-- ════════ THE SPINE ════════ -->
+  <section class="era rev">
+    <div class="num">The spine</div>
+    <h2>One task, the whole ladder</h2>
+    <p class="era-deck">The clearest way to feel seventy years of climbing: watch the <em>same</em> instruction — "say hello" — across every rung. Same job. Each time, less ceremony, more human, further from the metal.</p>
+  </section>
+
+  <div class="spine rev">
+    <div class="spine-row"><div class="who2">machine<span class="y">1940s</span></div><div class="snip"><span class="cm">10110000 01101000 …  (raw bits — unwriteable by hand)</span></div></div>
+    <div class="spine-row"><div class="who2">Assembly<span class="y">1947</span></div><div class="snip"><span class="fn">MOV</span> / <span class="fn">INT</span> calls to the operating system, ~10 lines</div></div>
+    <div class="spine-row"><div class="who2">FORTRAN<span class="y">1957</span></div><div class="snip"><span class="fn">PRINT</span> <span class="kw">*</span>, <span class="st">'HELLO, WORLD'</span></div></div>
+    <div class="spine-row"><div class="who2">LISP<span class="y">1958</span></div><div class="snip">(<span class="fn">print</span> <span class="st">"Hello, world"</span>)</div></div>
+    <div class="spine-row"><div class="who2">COBOL<span class="y">1959</span></div><div class="snip"><span class="fn">DISPLAY</span> <span class="st">"HELLO, WORLD"</span>.</div></div>
+    <div class="spine-row"><div class="who2">BASIC<span class="y">1964</span></div><div class="snip"><span class="nm">10</span> <span class="kw">PRINT</span> <span class="st">"HELLO, WORLD"</span></div></div>
+    <div class="spine-row"><div class="who2">C<span class="y">1972</span></div><div class="snip"><span class="fn">printf</span>(<span class="st">"Hello, world\n"</span>);</div></div>
+    <div class="spine-row"><div class="who2">Python<span class="y">1991</span></div><div class="snip"><span class="fn">print</span>(<span class="st">"Hello, world"</span>)</div></div>
+    <div class="spine-row"><div class="who2">Ruby<span class="y">1995</span></div><div class="snip"><span class="fn">puts</span> <span class="st">"Hello, world"</span></div></div>
+    <div class="spine-row"><div class="who2">JavaScript<span class="y">1995</span></div><div class="snip"><span class="fn">console.log</span>(<span class="st">"Hello, world"</span>)</div></div>
+    <div class="spine-row"><div class="who2">Rust<span class="y">2010</span></div><div class="snip"><span class="fn">println!</span>(<span class="st">"Hello, world"</span>);</div></div>
+  </div>
+  <p class="dim rev" style="font-size:16px">The bits at the top and the <code>println</code> at the bottom do the identical thing on the identical hardware. Everything between them is invented language — each one a rung someone built so a human wouldn't have to stand on the one below.</p>
+
+  <!-- ════════ PRESSURES ════════ -->
+  <section class="era rev">
+    <div class="num">The synthesis</div>
+    <h2>Five walls, over and over</h2>
+    <p class="era-deck">Strip away the names and the same handful of pressures forced almost every rung. New languages don't appear randomly — they appear when one of these breaks.</p>
+  </section>
+
+  <div class="pressures rev">
+    <div class="p"><div class="pk">▰ abstraction</div><div class="pd"><b>"This is too close to the machine."</b> The push to think in human terms — formulas, objects, ideas — and let a translator handle the bits. Machine code → assembly → FORTRAN → the rest.</div></div>
+    <div class="p"><div class="pk">▰ portability</div><div class="pd"><b>"I have to rewrite it for every computer."</b> The push to write once and run anywhere. Assembly's chip-lock → C's compilers → Java's invented machine.</div></div>
+    <div class="p"><div class="pk">▰ safety</div><div class="pd"><b>"One mistake and it crashes — or gets hacked."</b> The push to make whole classes of bug impossible. C's raw memory → garbage collection → Rust's compile-time proofs.</div></div>
+    <div class="p"><div class="pk">▰ readability</div><div class="pd"><b>"The people who must read this can't."</b> The push toward code a human — or a beginner, or a manager — can follow. COBOL's English, BASIC's simplicity, Python's clarity.</div></div>
+    <div class="p"><div class="pk">▰ expressiveness</div><div class="pd"><b>"My language can't even say what I mean."</b> The push to match the shape of the problem — lists for AI, objects for big systems, the web for interactivity. LISP, Smalltalk, JavaScript.</div></div>
+    <div class="p"><div class="pk">▰ the meta-pressure</div><div class="pd"><b>"A language is whatever you decide to build."</b> None of this is fixed. Grammar is invented; the translator makes it real. Every rung is someone refusing a wall — and you can invent the next one.</div></div>
+  </div>
+
+  <!-- ════════ CLOSE ════════ -->
+  <section class="close rev">
+    <h2>The ladder never ends, because the walls never do.</h2>
+    <p>Seventy years of programming languages is not a march toward one perfect language. It's a <b>chain of refusals.</b> Each language is someone looking at a wall — too slow, too dangerous, too tied to one machine, too hard for humans to read — and saying <em>no, build the next rung.</em></p>
+    <p>And the deepest thing under all of it: a programming language is <b>a constructed language</b>, an invented grammar with a translator beneath it that turns it into the grammar below, and the one below that, down to the only layer that isn't a design — the voltage in the silicon. To learn to program is to learn to write in one of these invented tongues. To <em>design</em> a language is to add a rung of your own.</p>
+    <p class="big">You started this paper asking how to print one line. The honest answer is: you were learning to speak one invented language, on a ladder of invented languages, every rung of which exists because a human refused the wall on the rung below.</p>
+  </section>
+
+  <div class="foot rev">
+    THE LADDER OF LANGUAGES · a purple paper on why languages change<br>
+    sourced from the standard history of computing · <b>honest flags marked where the record is contested or "first" is a cluster</b><br>
+    code examples are real and characteristic; some early ones lightly modernized for legibility (noted)<br>
+    built to be read top to bottom · the climb is the argument
+  </div>
+
+</div>
+
+<script>
+  // scroll reveal — respects reduced motion (the .rev rule short-circuits there)
+  (function(){
+    var els = document.querySelectorAll('.rev');
+    if (!('IntersectionObserver' in window)) { els.forEach(function(e){e.classList.add('in')}); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
+
+</body>
+</html>
